@@ -40,8 +40,11 @@ table.codon2AA_conversion td{
 	flex-grow:1;
 	align-self:stretch;
 }
+.codon{
+	/*border: 1px dotted blue;*//*test only*/
+}
 .codon2AA .AA{
-	display:flex;
+	display:flex; /*enabling this is necessary to activate align-items:center but will force strings embedded within <span></span>, <b></b>, or any kind of inline tag to not flow = forces it to the right of its foregoing sibling, and to the left of its trailing sibling.*/
 	position:relative;
 	top:0px;
 	float:right;
@@ -51,8 +54,10 @@ table.codon2AA_conversion td{
 	margin-left:1px;
 	border-left:2px solid blue;
 	color:blue;
+	/*border: 1px dashed teal;*//*test only*/
 }
 .codon2AA .AA.stop{
+	display:inline; /*overwriting the .AA property so that the non-stop codons can have the align-items:center property but the stop codons won't run into the issue of  embedded tags being treated as their own flex boxes.*/
 	border-left:none;
 	color:red;
 }
@@ -249,9 +254,11 @@ table.codon2AA_conversion td{
 		<div class="codon">UAU<br>UAC</div>
 		<div class="AA">Tyr</div>
 	</div>
-	<div class="codon2AA">
+	<div class="codon2AA"><!--codon2AA-->
 		<div class="codon">UAA<br>UAG</div>
-		<div class="AA stop"><span title="ochre">Stop</span><br/><span title="amber">Stop</span></div>
+		<!--<div class="AA stop">Stop<br/>Stop</div>-->
+		<div class="AA stop"><span title="ochre">Stop</span><br><span title="amber">Stop</span></div>
+		<!--<div class="AA stop"><div title="ochre">Stop</div><br/><div title="amber">Stop</div></div>-->
 	</div>
 </td>
 <td>
@@ -376,4 +383,5 @@ table.codon2AA_conversion td{
 </tr>
 </table>
 <!--<img src="[biology.kenyon.edu] codon_conversion.gif">-->
+</div>
 </div>
