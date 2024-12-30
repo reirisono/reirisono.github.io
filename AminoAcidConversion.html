@@ -1,387 +1,549 @@
-<style>
-body{
-	display:flex;
-	flex-direction:row;
-}
-.inline{
-	align-self:auto;
-	padding:1em;
-}
 
-#aa{
-	border-collapse:collapse;
-	font-family: Helvetica, Arial, sans-serif;
-	font-size: 10pt;
-}
-#aa thead{
-	background-color:#ccc
-}
-#aa td, #aa th{
-	border: 1px solid black;
-}
-table.codon2AA_conversion{
-	border-collapse:collapse;
-}
-table.codon2AA_conversion td{
-	border: 1px solid black;
-	text-align:center;
-	padding:4px;
-}
-.codon2AA{
-	display:flex;
-	flex-direction:row;
-	justify-content:space-between;
-	align-items:center;
-	align-content:center;
-	width:70px;
-	margin:2px 0px;
-}
-.codon2AA .codon, .codon2AA .AA{
-	flex-grow:1;
-	align-self:stretch;
-}
-.codon{
-	/*border: 1px dotted blue;*//*test only*/
-}
-.codon2AA .AA{
-	display:flex; /*enabling this is necessary to activate align-items:center but will force strings embedded within <span></span>, <b></b>, or any kind of inline tag to not flow = forces it to the right of its foregoing sibling, and to the left of its trailing sibling.*/
-	position:relative;
-	top:0px;
-	float:right;
-	height:inherit;
-	align-items:center;
-	padding:1px;
-	margin-left:1px;
-	border-left:2px solid blue;
-	color:blue;
-	/*border: 1px dashed teal;*//*test only*/
-}
-.codon2AA .AA.stop{
-	display:inline; /*overwriting the .AA property so that the non-stop codons can have the align-items:center property but the stop codons won't run into the issue of  embedded tags being treated as their own flex boxes.*/
-	border-left:none;
-	color:red;
-}
-.codon2AA .AA.start{
-	border-left:none;
-	color:green;
-}
-</style>
-<div class="inline">
-<table id="aa">
-	<colgroup>
-		<col />
-		<col width="4"/>
-		<col />
-	</colgroup>
-	<thead>
-		<tr>
-		<th>3char</th>
-		<th>1char</th>
-		<th>Amino acid name</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-		<td>Ala</td>
-		<td>A</td>
-		<td>Alanine</td>
-		</tr>
-		<tr>
-		<td>Arg</td>
-		<td>R</td>
-		<td>Arginine</td>
-		</tr>
-		<tr>
-		<td>Asn</td>
-		<td>N</td>
-		<td>Asparagine</td>
-		</tr>
-		<tr>
-		<td>Asp</td>
-		<td>D</td>
-		<td>Aspartic acid</td>
-		</tr>
-		<tr>
-		<td>Cys</td>
-		<td>C</td>
-		<td>Cysteine</td>
-		</tr>
-		<tr>
-		<td>Gln</td>
-		<td>Q</td>
-		<td>Glutamine</td>
-		</tr>
-		<tr>
-		<td>Glu</td>
-		<td>E</td>
-		<td>Glutamic acid</td>
-		</tr>
-		<tr>
-		<td>Gly</td>
-		<td>G</td>
-		<td>Glycine</td>
-		</tr>
-		<tr>
-		<td>His</td>
-		<td>H</td>
-		<td>Histidine</td>
-		</tr>
-		<tr>
-		<td>Ile</td>
-		<td>I</td>
-		<td>Isoleucine</td>
-		</tr>
-		<tr>
-		<td>Leu</td>
-		<td>L</td>
-		<td>Leucine</td>
-		</tr>
-		<tr>
-		<td>Lys</td>
-		<td>K</td>
-		<td>Lysine</td>
-		</tr>
-		<tr>
-		<td>Met</td>
-		<td>M</td>
-		<td>Methionine</td>
-		</tr>
-		<tr>
-		<td>Phe</td>
-		<td>F</td>
-		<td>Phenylalanine</td>
-		</tr>
-		<tr>
-		<td>Pro</td>
-		<td>P</td>
-		<td>Proline</td>
-		</tr>
-		<tr>
-		<td>Pyl</td>
-		<td>O</td>
-		<td>Pyrrolysine</td>
-		</tr>
-		<tr>
-		<td>Ser</td>
-		<td>S</td>
-		<td>Serine</td>
-		</tr>
-		<tr>
-		<td>Sec</td>
-		<td>U</td>
-		<td>Selenocysteine</td>
-		</tr>
-		<tr>
-		<td>Thr</td>
-		<td>T</td>
-		<td>Threonine</td>
-		</tr>
-		<tr>
-		<td>Trp</td>
-		<td>W</td>
-		<td>Tryptophan</td>
-		</tr>
-		<tr>
-		<td>Tyr</td>
-		<td>Y</td>
-		<td>Tyrosine</td>
-		</tr>
-		<tr>
-		<td>Val</td>
-		<td>V</td>
-		<td>Valine</td>
-		</tr>
-		<tr>
-		<td>Asx</td>
-		<td>B</td>
-		<td>Aspartic acid or Asparagine</td>
-		</tr>
-		<tr>
-		<td>Glx</td>
-		<td>Z</td>
-		<td>Glutamic acid or Glutamine</td>
-		</tr>
-		<tr>
-		<td>Xaa</td>
-		<td>X</td>
-		<td>Any amino acid</td>
-		</tr>
-		<tr>
-		<td>Xle</td>
-		<td>J</td>
-		<td>Leucine or Isoleucine</td>
-		</tr>
-		<tr>
-		<td>TERM</td>
-		<td></td>
-		<td>termination codon</td>
-		</tr>
-  </tbody>
-</table>
-</div>
-<div class="inline">
-<a href="http://biology.kenyon.edu/courses/biol114/Chap05/Chapter05.html">source: biology.kenyon.edu</a><br>
-<!--flexbox guide https://css-tricks.com/snippets/css/a-guide-to-flexbox/ -->
-<table class="codon2AA_conversion">
-<tr>
-<td>&nbsp;</td>
-<td>U</td>
-<td>C</td>
-<td>A</td>
-<td>G</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>U</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">UUU<br>UUC</div>
-		<div class="AA">Phe</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">UUA<br>UUG</div>
-		<div class="AA">Leu</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">UCU<br>UCC<br>UCA<br>UCG</div>
-		<div class="AA">Ser</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">UAU<br>UAC</div>
-		<div class="AA">Tyr</div>
-	</div>
-	<div class="codon2AA"><!--codon2AA-->
-		<div class="codon">UAA<br>UAG</div>
-		<!--<div class="AA stop">Stop<br/>Stop</div>-->
-		<div class="AA stop"><span title="ochre">Stop</span><br><span title="amber">Stop</span></div>
-		<!--<div class="AA stop"><div title="ochre">Stop</div><br/><div title="amber">Stop</div></div>-->
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">UGU<br>UGC</div>
-		<div class="AA">Cys</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">UGA</div>
-		<div class="AA stop"><span title="opal/umber">Stop</span></div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">UGG</div>
-		<div class="AA">Trp</div>
-	</div>
-</td>
-<td>U<br>C<br>A<br>G</td>
-</tr>
-<tr>
-<td>C</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">CUU<br>CUC<br>CUA<br>CUG</div>
-		<div class="AA">Leu</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">CCU<br>CCC<br>CCA<br>CCG</div>
-		<div class="AA">Pro</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">CAU<br>CAC</div>
-		<div class="AA">His</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">CAA<br>CAG</div>
-		<div class="AA">Gln</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">CGU<br>CGC<br>CGA<br>CGG</div>
-		<div class="AA">Arg</div>
-	</div>
-</td>
-<td>U<br>C<br>A<br>G</td>
-</tr>
-<tr>
-<td>A</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">AUU<br>AUC<br>AUA</div>
-		<div class="AA">Ile</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">AUG</div>
-		<div class="AA start">Met</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">ACU<br>ACC<br>ACA<br>ACG</div>
-		<div class="AA">Thr</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">AAU<br>AAC</div>
-		<div class="AA">Asn</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">AAA<br>AAG</div>
-		<div class="AA">Lys</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">AGU<br>AGC</div>
-		<div class="AA">Ser</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">AGA<br>AGG</div>
-		<div class="AA">Arg</div>
-	</div>
-</td>
-<td>U<br>C<br>A<br>G</td>
-</tr>
-<tr>
-<td>G</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">GUU<br>GUC<br>GUA<br>GUG</div>
-		<div class="AA">Val</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">GCU<br>GCC<br>GCA<br>GCG</div>
-		<div class="AA">Ala</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">GAU<br>GAC</div>
-		<div class="AA">Asp</div>
-	</div>
-	<div class="codon2AA">
-		<div class="codon">GAA<br>GAG</div>
-		<div class="AA">Glu</div>
-	</div>
-</td>
-<td>
-	<div class="codon2AA">
-		<div class="codon">GGU<br>GGC<br>GGA<br>GGG</div>
-		<div class="AA">Gly</div>
-	</div>
-</td>
-<td>U<br>C<br>A<br>G</td>
-</tr>
-</table>
-<!--<img src="[biology.kenyon.edu] codon_conversion.gif">-->
-</div>
+<style>
+    body{
+        display:flex;
+        flex-direction:row;
+    }
+    .inline{
+        align-self:auto;
+        padding:1em;
+    }
+    
+    #aa{
+        border-collapse:collapse;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 10pt;
+    }
+    #aa thead{
+        background-color:#ccc
+    }
+    #aa td, #aa th{
+        border: 1px solid black;
+    }
+    table.codon2AA_conversion{
+        border-collapse:collapse;
+    }
+    table.codon2AA_conversion td{
+        border: 1px solid black;
+        text-align:center;
+        padding:4px;
+    }
+    .codon2AA{
+        display:flex;
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+        align-content:center;
+        width:70px;
+        margin:2px 0px;
+    }
+    .codon2AA .codon, .codon2AA .AA{
+        flex-grow:1;
+        align-self:stretch;
+    }
+    .codon{
+        /*border: 1px dotted blue;*//*test only*/
+    }
+    .codon2AA .AA{
+        display:flex; /*enabling this is necessary to activate align-items:center but will force strings embedded within <span></span>, <b></b>, or any kind of inline tag to not flow = forces it to the right of its foregoing sibling, and to the left of its trailing sibling.*/
+        position:relative;
+        top:0px;
+        float:right;
+        height:inherit;
+        align-items:center;
+        padding:1px;
+        margin-left:1px;
+        border-left:2px solid blue;
+        color:blue;
+        /*border: 1px dashed teal;*//*test only*/
+    }
+    .codon2AA .AA.stop{
+        display:inline; /*overwriting the .AA property so that the non-stop codons can have the align-items:center property but the stop codons won't run into the issue of  embedded tags being treated as their own flex boxes.*/
+        border-left:none;
+        color:red;
+    }
+    .codon2AA .AA.start{
+        border-left:none;
+        color:green;
+    }
+    </style>
+    <div class="inline">
+    <table id="aa">
+        <colgroup>
+            <col />
+            <col width="4"/>
+            <col />
+        </colgroup>
+        <thead>
+            <tr>
+            <th>3char</th>
+            <th>1char</th>
+            <th>Amino acid name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>Ala</td>
+            <td>A</td>
+            <td>Alanine</td>
+            </tr>
+            <tr>
+            <td>Arg</td>
+            <td>R</td>
+            <td>Arginine</td>
+            </tr>
+            <tr>
+            <td>Asn</td>
+            <td>N</td>
+            <td>Asparagine</td>
+            </tr>
+            <tr>
+            <td>Asp</td>
+            <td>D</td>
+            <td>Aspartic acid</td>
+            </tr>
+            <tr>
+            <td>Cys</td>
+            <td>C</td>
+            <td>Cysteine</td>
+            </tr>
+            <tr>
+            <td>Gln</td>
+            <td>Q</td>
+            <td>Glutamine</td>
+            </tr>
+            <tr>
+            <td>Glu</td>
+            <td>E</td>
+            <td>Glutamic acid</td>
+            </tr>
+            <tr>
+            <td>Gly</td>
+            <td>G</td>
+            <td>Glycine</td>
+            </tr>
+            <tr>
+            <td>His</td>
+            <td>H</td>
+            <td>Histidine</td>
+            </tr>
+            <tr>
+            <td>Ile</td>
+            <td>I</td>
+            <td>Isoleucine</td>
+            </tr>
+            <tr>
+            <td>Leu</td>
+            <td>L</td>
+            <td>Leucine</td>
+            </tr>
+            <tr>
+            <td>Lys</td>
+            <td>K</td>
+            <td>Lysine</td>
+            </tr>
+            <tr>
+            <td>Met</td>
+            <td>M</td>
+            <td>Methionine</td>
+            </tr>
+            <tr>
+            <td>Phe</td>
+            <td>F</td>
+            <td>Phenylalanine</td>
+            </tr>
+            <tr>
+            <td>Pro</td>
+            <td>P</td>
+            <td>Proline</td>
+            </tr>
+            <tr>
+            <td>Pyl</td>
+            <td>O</td>
+            <td>Pyrrolysine</td>
+            </tr>
+            <tr>
+            <td>Ser</td>
+            <td>S</td>
+            <td>Serine</td>
+            </tr>
+            <tr>
+            <td>Sec</td>
+            <td>U</td>
+            <td>Selenocysteine</td>
+            </tr>
+            <tr>
+            <td>Thr</td>
+            <td>T</td>
+            <td>Threonine</td>
+            </tr>
+            <tr>
+            <td>Trp</td>
+            <td>W</td>
+            <td>Tryptophan</td>
+            </tr>
+            <tr>
+            <td>Tyr</td>
+            <td>Y</td>
+            <td>Tyrosine</td>
+            </tr>
+            <tr>
+            <td>Val</td>
+            <td>V</td>
+            <td>Valine</td>
+            </tr>
+            <tr>
+            <td>Asx</td>
+            <td>B</td>
+            <td>Aspartic acid or Asparagine</td>
+            </tr>
+            <tr>
+            <td>Glx</td>
+            <td>Z</td>
+            <td>Glutamic acid or Glutamine</td>
+            </tr>
+            <tr>
+            <td>Xaa</td>
+            <td>X</td>
+            <td>Any amino acid</td>
+            </tr>
+            <tr>
+            <td>Xle</td>
+            <td>J</td>
+            <td>Leucine or Isoleucine</td>
+            </tr>
+            <tr>
+            <td>TERM</td>
+            <td></td>
+            <td>termination codon</td>
+            </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="inline">
+    Human nuclear codons <a href="http://biology.kenyon.edu/courses/biol114/Chap05/Chapter05.html">source: biology.kenyon.edu</a><br>
+    <!--flexbox guide https://css-tricks.com/snippets/css/a-guide-to-flexbox/ -->
+    <table class="codon2AA_conversion">
+    <tr>
+    <td>&nbsp;</td>
+    <td>U</td>
+    <td>C</td>
+    <td>A</td>
+    <td>G</td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td>U</td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">UUU<br>UUC</div>
+            <div class="AA">Phe</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">UUA<br>UUG</div>
+            <div class="AA">Leu</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">UCU<br>UCC<br>UCA<br>UCG</div>
+            <div class="AA">Ser</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">UAU<br>UAC</div>
+            <div class="AA">Tyr</div>
+        </div>
+        <div class="codon2AA"><!--codon2AA-->
+            <div class="codon">UAA<br>UAG</div>
+            <!--<div class="AA stop">Stop<br/>Stop</div>-->
+            <div class="AA stop"><span title="ochre">Stop</span><br><span title="amber">Stop</span></div>
+            <!--<div class="AA stop"><div title="ochre">Stop</div><br/><div title="amber">Stop</div></div>-->
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">UGU<br>UGC</div>
+            <div class="AA">Cys</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">UGA</div>
+            <div class="AA stop"><span title="opal/umber">Stop</span></div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">UGG</div>
+            <div class="AA">Trp</div>
+        </div>
+    </td>
+    <td>U<br>C<br>A<br>G</td>
+    </tr>
+    <tr>
+    <td>C</td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">CUU<br>CUC<br>CUA<br>CUG</div>
+            <div class="AA">Leu</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">CCU<br>CCC<br>CCA<br>CCG</div>
+            <div class="AA">Pro</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">CAU<br>CAC</div>
+            <div class="AA">His</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">CAA<br>CAG</div>
+            <div class="AA">Gln</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">CGU<br>CGC<br>CGA<br>CGG</div>
+            <div class="AA">Arg</div>
+        </div>
+    </td>
+    <td>U<br>C<br>A<br>G</td>
+    </tr>
+    <tr>
+    <td>A</td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">AUU<br>AUC<br>AUA</div>
+            <div class="AA">Ile</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">AUG</div>
+            <div class="AA start">Met</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">ACU<br>ACC<br>ACA<br>ACG</div>
+            <div class="AA">Thr</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">AAU<br>AAC</div>
+            <div class="AA">Asn</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">AAA<br>AAG</div>
+            <div class="AA">Lys</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">AGU<br>AGC</div>
+            <div class="AA">Ser</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">AGA<br>AGG</div>
+            <div class="AA">Arg</div>
+        </div>
+    </td>
+    <td>U<br>C<br>A<br>G</td>
+    </tr>
+    <tr>
+    <td>G</td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">GUU<br>GUC<br>GUA<br>GUG</div>
+            <div class="AA">Val</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">GCU<br>GCC<br>GCA<br>GCG</div>
+            <div class="AA">Ala</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">GAU<br>GAC</div>
+            <div class="AA">Asp</div>
+        </div>
+        <div class="codon2AA">
+            <div class="codon">GAA<br>GAG</div>
+            <div class="AA">Glu</div>
+        </div>
+    </td>
+    <td>
+        <div class="codon2AA">
+            <div class="codon">GGU<br>GGC<br>GGA<br>GGG</div>
+            <div class="AA">Gly</div>
+        </div>
+    </td>
+    <td>U<br>C<br>A<br>G</td>
+    </tr>
+    </table>
+    <!--<img src="[biology.kenyon.edu] codon_conversion.gif">-->
+    </div>
+    <div class="inline">
+        Human mitochondrial codons <a href="https://www.mun.ca/biology/scarr/MtDNA_code.html">source: www.mun.ca</a><br>
+        <!--flexbox guide https://css-tricks.com/snippets/css/a-guide-to-flexbox/ -->
+        <table class="codon2AA_conversion">
+        <tr>
+        <td>&nbsp;</td>
+        <td>U</td>
+        <td>C</td>
+        <td>A</td>
+        <td>G</td>
+        <td>&nbsp;</td>
+        </tr>
+        <tr>
+        <td>U</td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">UUU<br>UUC</div>
+                <div class="AA">Phe</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">UUA<br>UUG</div>
+                <div class="AA">Leu</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">UCU<br>UCC<br>UCA<br>UCG</div>
+                <div class="AA">Ser</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">UAU<br>UAC</div>
+                <div class="AA">Tyr</div>
+            </div>
+            <div class="codon2AA"><!--codon2AA-->
+                <div class="codon">UAA<br>UAG</div>
+                <!--<div class="AA stop">Stop<br/>Stop</div>-->
+                <div class="AA stop"><span title="ochre">Stop</span><br><span title="amber">Stop</span></div>
+                <!--<div class="AA stop"><div title="ochre">Stop</div><br/><div title="amber">Stop</div></div>-->
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">UGU<br>UGC</div>
+                <div class="AA">Cys</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">UGA<br>UGG</div>
+                <div class="AA">Trp</div>
+            </div>
+        </td>
+        <td>U<br>C<br>A<br>G</td>
+        </tr>
+        <tr>
+        <td>C</td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">CUU<br>CUC<br>CUA<br>CUG</div>
+                <div class="AA">Leu</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">CCU<br>CCC<br>CCA<br>CCG</div>
+                <div class="AA">Pro</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">CAU<br>CAC</div>
+                <div class="AA">His</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">CAA<br>CAG</div>
+                <div class="AA">Gln</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">CGU<br>CGC<br>CGA<br>CGG</div>
+                <div class="AA">Arg</div>
+            </div>
+        </td>
+        <td>U<br>C<br>A<br>G</td>
+        </tr>
+        <tr>
+        <td>A</td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">AUU<br>AUC</div>
+                <div class="AA">Ile</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">AUA<br>AUG</div>
+                <div class="AA start">Met</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">ACU<br>ACC<br>ACA<br>ACG</div>
+                <div class="AA">Thr</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">AAU<br>AAC</div>
+                <div class="AA">Asn</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">AAA<br>AAG</div>
+                <div class="AA">Lys</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">AGU<br>AGC</div>
+                <div class="AA">Ser</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">AGA<br>AGG</div>
+                <div class="AA stop">Stop<br>Stop</div>
+            </div>
+        </td>
+        <td>U<br>C<br>A<br>G</td>
+        </tr>
+        <tr>
+        <td>G</td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">GUU<br>GUC<br>GUA<br>GUG</div>
+                <div class="AA">Val</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">GCU<br>GCC<br>GCA<br>GCG</div>
+                <div class="AA">Ala</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">GAU<br>GAC</div>
+                <div class="AA">Asp</div>
+            </div>
+            <div class="codon2AA">
+                <div class="codon">GAA<br>GAG</div>
+                <div class="AA">Glu</div>
+            </div>
+        </td>
+        <td>
+            <div class="codon2AA">
+                <div class="codon">GGU<br>GGC<br>GGA<br>GGG</div>
+                <div class="AA">Gly</div>
+            </div>
+        </td>
+        <td>U<br>C<br>A<br>G</td>
+        </tr>
+        </table>
+        <!--<img src="[biology.kenyon.edu] codon_conversion.gif">-->
+        </div>
 </div>
